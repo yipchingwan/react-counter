@@ -4,12 +4,13 @@ import './App.css';
 import CounterGroup from './components/CounterGroup.js'
 
 class App extends Component {
+  state = {size : 0}
+  
   
   render() {
     return (
       <div>
-       <CounterGroup size={5}/>
-        
+       <CounterGroup/>      
       </div>
     );
   }

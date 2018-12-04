@@ -2,14 +2,73 @@ import React, { Component } from 'react'
 import Counter from './Counter.js'
 
 export default class CounterGroup extends Component {
-    state = {sum : 0, sizeArray : new Array(this.props.size).fill(0)}
+    state = {
+        sum : 0,
+        size : 4, 
+        counters : new Array(3).fill(0).map(()=>{
+            return {number : 0, id: new Date().getDate + Math.random()};
+        })
+    };
+
+    inputUpdate = (evt) =>{
+        this.setState({
+            size : evt.target.value
+        })
+    }
+    regenrateCounters = (evt) => {
+        this.setState({
+            counters : new Array(parseInt(this.state.size)).fill(0).map(()=>{
+                return { number: 0, id: new Date().getTime + Math.random() };
+            }),
+            sum : 0
+        })
+    }
+
     clickUpdate = (number)=>{
-        this.setState({sum : this.state.sum+number});
+       this.setState({
+           sum : this.state.sum+number
+       });
+    }
+    add = (number, id)=>{
+        const counters = this.state.counters.map(items=>{
+            if(items.id===id){
+                return {number : items.number + number, id : id}
+            }
+            else{
+                return items;
+            }
+        });
+        this.setState({
+            counters : counters
+        });
+    }
+    sub = (number, id)=>{
+        const counters = this.state.counters.map(items=>{
+            if(items.id===id){
+                return {number : items.number + number, id : id}
+            }
+            else{
+                return items;
+            }
+        });
+        this.setState({
+            counters : counters
+        });
     }
     render() {
       return (
         <div>
-            {this.state.sizeArray.map(()=>( <Counter OnUpdate={this.clickUpdate}/>))}
+            <input onChange={this.inputUpdate}></input>
+            <button onClick={this.regenrateCounters}>Generate</button>
+            {this.state.counters.map((item)=>( 
+                <Counter 
+                    key={item.id}
+                    id={item.id}
+                    OnUpdate={this.clickUpdate} 
+                    OnUpdateAdd={this.add} 
+                    OnUpdateSub={this.sub} countNumber={this.state.count}
+                    number={item.number}/>
+            ))}
             <span>{this.state.sum}</span>   
         </div>
       );
